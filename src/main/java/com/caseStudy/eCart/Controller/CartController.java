@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.PostRemove;
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin()
 @RestController
@@ -26,13 +27,13 @@ public class CartController {
 
     @GetMapping(value = "/remove/{prodId}")
     @ResponseBody
-    public String removeFromCart(@PathVariable Long prodId, Principal principal) {
+    public Optional<Cart> removeFromCart(@PathVariable Long prodId, Principal principal) {
         return cartService.removefromcart(currentUserService.getUserrId(principal),prodId);
     }
 
     @GetMapping(value = "/delete/{prodId}")
     @ResponseBody
-    public String deletefromcart(@PathVariable Long prodId, Principal principal) {
+    public Optional<Cart> deletefromcart(@PathVariable Long prodId, Principal principal) {
         return cartService.removeProduct(currentUserService.getUserrId(principal),prodId);
     }
 
@@ -50,7 +51,7 @@ public class CartController {
 
     @GetMapping(value = "/clearcart")
     @ResponseBody
-    public String clearCart(Principal principal) {
+    public List<Cart> clearCart(Principal principal) {
         return cartService.clearCart(currentUserService.getUserrId(principal),principal);
     }
 

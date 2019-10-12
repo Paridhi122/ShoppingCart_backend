@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CartService {
@@ -42,15 +43,15 @@ public class CartService {
         return cartRepository.findByUsersAndProducts_Active(users,1);
     }
 
-    public String clearCart(Long userId, Principal principal) {
+    public List<Cart> clearCart(Long userId, Principal principal) {
         Users users = userRepository.findByUserId(userId);
         List<Cart> cartList = cartRepository.findAllByUsers(users);
         for(Cart cart: cartList) {
             cartRepository.deleteById(cart.getCartId());
         }
-        return "Cart Cleared!!";
+        return cartRepository.findAllByUsers(users);
     }
-    public String removefromcart(Long userid, Long productid) {
+    public Optional<Cart> removefromcart(Long userid, Long productid) {
         Product product = productRepository.findByProdId(productid);
         Users users = userRepository.findByUserId(userid);
         if(cartRepository.findByUsersAndProducts(users,product).get().getQuantity() <= 1) {
@@ -62,15 +63,15 @@ public class CartService {
             cart.setQuantity(cart.getQuantity()-1);
             cartRepository.save(cart);
         }
-        return "Removed";
+        return cartRepository.findByUsersAndProducts(users,product);
     }
 
-    public String removeProduct(Long userid, Long productid) {
+    public Optional<Cart> removeProduct(Long userid, Long productid) {
         Product product = productRepository.findByProdId(productid);
         Users users = userRepository.findByUserId(userid);
             Cart cart = cartRepository.findByUsersAndProducts(users,product).get();
             cartRepository.delete(cart);
-        return "Removed";
+        return cartRepository.findByUsersAndProducts(users,product);
     }
 
 }
