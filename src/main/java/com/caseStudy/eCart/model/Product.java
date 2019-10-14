@@ -28,6 +28,17 @@ public class Product implements Serializable {
     @Column(name = "active")
     private int active;
 
+    @Column
+    private int sm;
+
+    public int getSm() {
+        return sm;
+    }
+
+    public void setSm(int sm) {
+        this.sm = sm;
+    }
+
     public Long getProdId() {
         return prodId;
     }

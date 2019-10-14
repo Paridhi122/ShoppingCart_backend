@@ -4,10 +4,10 @@ import com.caseStudy.eCart.Repository.CartRepository;
 import com.caseStudy.eCart.Service.CartService;
 import com.caseStudy.eCart.Service.CurrentUserService;
 import com.caseStudy.eCart.model.Cart;
+import com.caseStudy.eCart.model.OrderHistory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.PostRemove;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
@@ -55,5 +55,26 @@ public class CartController {
         return cartService.clearCart(currentUserService.getUserrId(principal),principal);
     }
 
+    @GetMapping(value = "/checkout")
+    @ResponseBody
+    public double checkout(Principal principal) {
+        return cartService.checkout(currentUserService.getUserrId(principal),principal);
+    }
+
+    @GetMapping(value = "/showOrderHistory")
+    @ResponseBody
+    public List<OrderHistory> showHistory(Principal principal ) {
+        return cartService.showorderhistory(currentUserService.getUserrId(principal),principal);
+    }
+    @GetMapping(value = "/quantity")
+    @ResponseBody
+    public int quantity(Principal principal ) {
+        return cartService.calquantity(currentUserService.getUserrId(principal),principal);
+    }
+    @GetMapping(value = "/price")
+    @ResponseBody
+    public double price(Principal principal ) {
+        return cartService.calprice(currentUserService.getUserrId(principal),principal);
+    }
 
 }

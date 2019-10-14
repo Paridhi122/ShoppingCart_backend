@@ -2,6 +2,7 @@ package com.caseStudy.eCart.Service;
 
 import com.caseStudy.eCart.Repository.*;
 import com.caseStudy.eCart.model.Cart;
+import com.caseStudy.eCart.model.OrderHistory;
 import com.caseStudy.eCart.model.Product;
 import com.caseStudy.eCart.model.Users;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,8 @@ public class CartService {
     private CartRepository cartRepository;
     @Autowired
     private UserRepository userRepository;
-//    @Autowired
-//    private OrderHistoryRepository orderHistoryRepository;
+    @Autowired
+    private OrderHistoryRepository orderHistoryRepository;
 
     public Cart addProduct(Long user_id, Long product_id) {
         Product product = productRepository.findByProdId(product_id);
@@ -28,11 +29,11 @@ public class CartService {
 
         if (cartRepository.findByUsersAndProducts(users, product).isPresent()) {
             Cart cart = cartRepository.findByUsersAndProducts(users, product).get();
-
             cart.setQuantity(cart.getQuantity() + 1);
+            cart.setTotalprice(cart.getQuantity()*product.getPrice());
             cartRepository.save(cart);
         } else {
-            Cart c = new Cart(product, users, 1);
+            Cart c = new Cart(product, users, 1,product.getPrice());
             cartRepository.save(c);
         }
         return cartRepository.findByUsersAndProducts(users, product).get();
@@ -61,6 +62,7 @@ public class CartService {
         else {
             Cart cart = cartRepository.findByUsersAndProducts(users,product).get();
             cart.setQuantity(cart.getQuantity()-1);
+            cart.setTotalprice(cart.getTotalprice()-product.getPrice());
             cartRepository.save(cart);
         }
         return cartRepository.findByUsersAndProducts(users,product);
@@ -74,4 +76,50 @@ public class CartService {
         return cartRepository.findByUsersAndProducts(users,product);
     }
 
+    public double checkout(Long user_id, Principal principal) {
+        Users users = userRepository.findByUserId(user_id);
+        List<Cart> cartList = cartRepository.findAllByUsers(users);
+        int q = 0;
+        double price=0;
+        for (Cart cart: cartList) {
+            OrderHistory orderHistory = new OrderHistory();
+            orderHistory.setUsers(users);
+            orderHistory.setProduct(cart.getProducts());
+            price = price+cart.getTotalprice();
+            q = q + cart.getQuantity();
+            orderHistory.setDate();
+            orderHistory.setTotalQuantity(q);
+            orderHistory.setTotalcartprice(price);
+            orderHistoryRepository.save(orderHistory);
+        }
+
+        clearCart(user_id,principal);
+        return 0;
+    }
+
+    public int calquantity(Long user_id,Principal principal) {
+        Users users = userRepository.findByUserId(user_id);
+        List<Cart> cartList = cartRepository.findAllByUsers(users);
+        int q = 0;
+        for (Cart cart: cartList) {
+            q = q + cart.getQuantity();
+
+        }
+        return q;
+    }
+
+    public double calprice(Long user_id,Principal principal) {
+        Users users = userRepository.findByUserId(user_id);
+        List<Cart> cartList = cartRepository.findAllByUsers(users);
+        double q = 0;
+        for (Cart cart: cartList) {
+            q = q + cart.getTotalprice();
+        }
+        return q;
+    }
+
+    public List<OrderHistory> showorderhistory(Long user_id,Principal principal){
+        Users users = userRepository.findByUserId(user_id);
+        return orderHistoryRepository.findAllByUsers(users);
+    }
 }

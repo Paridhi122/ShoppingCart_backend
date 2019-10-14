@@ -26,8 +26,8 @@ public class CurrentUserService {
         return  userRepository.findByUsername(principal.getName()).get().getRole();//.getroleid();
     }
 
-    public Optional<Users> getUserProfile(Principal principal) {
-        return userRepository.findByUsername(principal.getName());
+    public Users getUserProfile(Long userid, Principal principal) {
+        return userRepository.findByUserId(userid);
     }
 
     public void checkDetails(Users user, Principal principal) {

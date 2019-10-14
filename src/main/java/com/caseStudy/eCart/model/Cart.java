@@ -19,13 +19,19 @@ public class Cart implements Serializable {
     @Column
     private int quantity;
     @Column
-    private Double totalprice;
+    private double totalprice;
+
+    public Cart(Product products, Users users, int quantity, double totalprice) {
+        this.products = products;
+        this.users = users;
+        this.quantity = quantity;
+        this.totalprice = totalprice;
+    }
 
     public Cart(Product products, Users users, int quantity) {
         this.products = products;
         this.users = users;
         this.quantity = quantity;
-        this.totalprice = getTotalprice();
     }
 
     public Cart() {
@@ -63,12 +69,11 @@ public class Cart implements Serializable {
         this.quantity = quantity;
     }
 
-    public Double getTotalprice() {
+    public double getTotalprice() {
         return totalprice;
     }
 
-    public void setTotalprice(Double totalprice) {
-        totalprice = getProducts().getPrice() * getQuantity();
+    public void setTotalprice(double totalprice) {
         this.totalprice = totalprice;
     }
 }
