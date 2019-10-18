@@ -85,11 +85,9 @@ public class CartService {
             OrderHistory orderHistory = new OrderHistory();
             orderHistory.setUsers(users);
             orderHistory.setProduct(cart.getProducts());
-            price = price+cart.getTotalprice();
-            q = q + cart.getQuantity();
             orderHistory.setDate();
-            orderHistory.setTotalQuantity(q);
-            orderHistory.setTotalcartprice(price);
+            orderHistory.setTotalQuantity(cart.getQuantity());
+            orderHistory.setTotalcartprice(cart.getTotalprice());
             orderHistoryRepository.save(orderHistory);
         }
 

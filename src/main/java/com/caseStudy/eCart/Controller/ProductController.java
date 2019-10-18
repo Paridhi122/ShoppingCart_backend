@@ -80,5 +80,9 @@ public class ProductController {
     public List<Product> getProductbyCategoryAndRange(@PathVariable(value = "category") String cat,@PathVariable(value = "price1") Double p1,@PathVariable(value="price2") Double p2){
         return productRepository.findByCategoryAndPriceBetween(cat,p1,p2);
     }
+    @GetMapping("/search/{name}")
+    public List<Product> Searchh(@PathVariable(value = "name") String name) {
+        return productRepository.findByNameContaining(name);
+    }
 
 }

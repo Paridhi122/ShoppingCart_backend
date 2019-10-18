@@ -38,10 +38,11 @@ public class UsersController {
     public Users updateuser(@Valid @RequestBody Users userdetails, Principal principal) {
 
         Users users = currentUserService.getUserProfile(currentUserService.getUserrId(principal),principal);
-//        users.setPassword(userdetails.getPassword());
-//        product.setName(productDetails.getName());
-//        product.setPrice(productDetails.getPrice());
-//        product.setCategory(productDetails.getCategory());
+        users.setPassword(userdetails.getPassword());
+        users.setName(userdetails.getName());
+        users.setEmail(userdetails.getEmail());
+        users.setUsername(userdetails.getUsername());
+        users.setAddress(userdetails.getAddress());
 
         Users updatedUser = userRepository.save(users);
         return updatedUser;
@@ -57,5 +58,11 @@ public class UsersController {
     @ResponseBody
     public Users getuser(Principal principal) {
         return currentUserService.getUserProfile(currentUserService.getUserrId(principal),principal);
+    }
+
+    @GetMapping("/Getrole")
+    @ResponseBody
+    public String getrole(Principal principal) {
+        return currentUserService.getUserRole(currentUserService.getUserrId(principal),principal);
     }
 }

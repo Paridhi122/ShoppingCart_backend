@@ -22,7 +22,7 @@ public class CurrentUserService {
         return userRepository.findByUsername(username).get().getUserId();
     }
 
-    public String getUserRole(Principal principal) {
+    public String getUserRole(Long user_id, Principal principal) {
         return  userRepository.findByUsername(principal.getName()).get().getRole();//.getroleid();
     }
 
