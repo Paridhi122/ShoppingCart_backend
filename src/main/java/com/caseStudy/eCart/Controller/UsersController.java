@@ -34,18 +34,18 @@ public class UsersController {
         return userRepository.findByUsername(u);
     }
 
-    @PutMapping("/updateuser")
-    public Users updateuser(@Valid @RequestBody Users userdetails, Principal principal) {
+    @PutMapping("/updateuser/{id}")
+    public Users updateUser(@PathVariable(value = "id") Long userid,
+                            @Valid @RequestBody Users userDetails) {
 
-        Users users = currentUserService.getUserProfile(currentUserService.getUserrId(principal),principal);
-        users.setPassword(userdetails.getPassword());
-        users.setName(userdetails.getName());
-        users.setEmail(userdetails.getEmail());
-        users.setUsername(userdetails.getUsername());
-        users.setAddress(userdetails.getAddress());
-
-        Users updatedUser = userRepository.save(users);
-        return updatedUser;
+        Users user = userRepository.findByUserId(userid);
+        user.setUsername(userDetails.getUsername());
+        user.setPassword(userDetails.getPassword());
+        user.setEmail(userDetails.getEmail());
+        user.setName(userDetails.getName());
+        user.setAddress(userDetails.getAddress());
+        Users updateduser = userRepository.save(user);
+        return updateduser;
     }
     @PostMapping("/addUser")
     public Users createUser(@Valid @RequestBody Users user) {

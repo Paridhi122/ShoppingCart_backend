@@ -42,10 +42,11 @@ public class ProductController {
         Product product = productRepository.findById(pId)
                 .orElseThrow(() -> new Exception("Product not Found"));
 
-//        product.setName(productDetails.getName());
-//        product.setPrice(productDetails.getPrice());
-//        product.setCategory(productDetails.getCategory());
+        product.setName(productDetails.getName());
+        product.setPrice(productDetails.getPrice());
+        product.setCategory(productDetails.getCategory());
         product.setSrc(productDetails.getSrc());
+        product.setActive(productDetails.getActive());
 
         Product updatedProduct = productRepository.save(product);
         return updatedProduct;
